@@ -1,7 +1,17 @@
-```python
-Book.objects.all()
-# Output: <QuerySet [<Book: 1984>]>
+# Retrieve the Book instance
 
-book = Book.objects.get(id=1)
-book.title
-# Output: '1984'
+This documents clarify the steps and the expected output for retrieving a book instance in Django using the ORM.
+
+## Retrieve instance command
+
+```python
+from .models import Book
+
+retrieved_book = Book.objects.get(title="1984")
+print(retrieved_book)
+```
+
+## Expected output
+
+1984 by George Orwell (1949)
+

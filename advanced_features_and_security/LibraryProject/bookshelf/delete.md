@@ -1,7 +1,13 @@
-```python
-from bookshelf.models import Book
-book.delete()
+# Delete the Book instance
 
-# Confirm deletion
-Book.objects.all()
-# Output: <QuerySet []>
+This documents clarify the steps for deleting the retrieved book instance in Django using the ORM.
+
+## Delete instance command
+
+```python
+from .models import Book
+
+deleted_book = Book.objects.get(title="Nineteen Eighty-Four")
+deleted_book.delete()
+```
+
