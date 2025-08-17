@@ -27,6 +27,7 @@ urlpatterns = [
     path("post/new/", PostCreateView.as_view(), name='post-create'),  # Create new post
     path('posts/<int:pk>/', PostDetailView.as_view(), name='post-detail'),  # View post detail
     path('posts/<int:pk>/edit/', PostUpdateView.as_view(), name='post-update'),  # Edit post
+    path("post/<int:pk>/update/", PostUpdateView.as_view(), name='post-update-alt'),  # Update post (alternative URL)
     path("post/<int:pk>/delete/", PostDeleteView.as_view(), name='post-delete'),  # Delete post
 
     # Comment URLs
