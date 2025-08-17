@@ -172,11 +172,15 @@ class TaggedPostListView(ListView):
     context_object_name = 'posts'
 
     def get_queryset(self):
-        tag_name = self.kwargs['tag_name']
+        tag_name = self.kwargs.get('tag_name') or self.kwargs.get('tag_slug')
         return Post.objects.filter(tags__name__iexact=tag_name).order_by('-published_date')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['tag_name'] = self.kwargs['tag_name']
+        context['tag_name'] = self.kwargs.get('tag_name') or self.kwargs.get('tag_slug')
         return context
+
+
+# Alias for the required PostByTagListView
+PostByTagListView = TaggedPostListView
 
