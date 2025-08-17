@@ -1,0 +1,52 @@
+{% extends 'blog/base.html' %}
+
+{% block title %}Delete Comment - Django Blog{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h3 class="mb-0">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        Delete Comment
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="alert alert-warning">
+                        <strong>Are you sure you want to delete this comment?</strong>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <h6 class="text-muted">Comment Content:</h6>
+                        <div class="border-start border-3 border-secondary ps-3 bg-light p-2 rounded">
+                            <p class="mb-0 fst-italic">"{{ comment.content|truncatewords:20 }}"</p>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <small class="text-muted">
+                            Posted: {{ comment.created_at|date:"F d, Y \a\t g:i A" }}
+                        </small>
+                    </div>
+                    
+                    <p class="text-muted">This action cannot be undone.</p>
+                    
+                    <form method="post" class="d-inline">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger me-2">
+                            <i class="fas fa-trash"></i>
+                            Confirm Delete
+                        </button>
+                    </form>
+                    <a href="{% url 'post-detail' comment.post.pk %}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i>
+                        Cancel
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
