@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from .models import Post, Comment, Tag
+from taggit.forms import TagWidget
 
 
 class CustomUserCreationForm(UserCreationForm):
@@ -32,18 +33,9 @@ class CustomUserCreationForm(UserCreationForm):
 
 
 class PostForm(forms.ModelForm):
-    tags = forms.CharField(
-        required=False, 
-        help_text="Add tags separated by commas",
-        widget=forms.TextInput(attrs={
-            'class': 'form-control',
-            'placeholder': 'Add tags separated by commas (e.g., python, django, web)'
-        })
-    )
-
     class Meta:
         model = Post
-        fields = ['title', 'content']
+        fields = ['title', 'content', 'tags']
         widgets = {
             'title': forms.TextInput(attrs={
                 'class': 'form-control',
@@ -53,30 +45,12 @@ class PostForm(forms.ModelForm):
                 'class': 'form-control',
                 'rows': 8,
                 'placeholder': 'Write your post content here...'
+            }),
+            'tags': TagWidget(attrs={
+                'class': 'form-control',
+                'placeholder': 'Add tags separated by commas (e.g., python, django, web)'
             })
         }
-
-    def save(self, commit=True):
-        instance = super().save(commit=commit)
-        if commit:
-            # Handle tags
-            tags_input = self.cleaned_data.get('tags', '')
-            if tags_input:
-                # Clear existing tags
-                instance.tags.clear()
-                # Split tags by comma and process them
-                tag_names = [tag.strip() for tag in tags_input.split(',') if tag.strip()]
-                for tag_name in tag_names:
-                    tag, created = Tag.objects.get_or_create(name=tag_name)
-                    instance.tags.add(tag)
-        return instance
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        if self.instance and self.instance.pk:
-            # Pre-populate tags field with existing tags
-            existing_tags = ', '.join([tag.name for tag in self.instance.tags.all()])
-            self.fields['tags'].initial = existing_tags
 
 
 class CommentForm(forms.ModelForm):
