@@ -1,0 +1,22 @@
+# Django Social Media API Requirements
+
+# Core Django and DRF
+django>=5.1
+djangorestframework>=3.14.0
+
+# Image handling
+Pillow>=10.0.0
+
+# Environment variables (recommended)
+python-decouple>=3.8
+
+# Database drivers (uncomment for production)
+# psycopg2-binary>=2.9.0  # PostgreSQL
+# mysqlclient>=2.1.0      # MySQL
+
+# Production server (uncomment for production)
+# gunicorn>=21.0.0
+# whitenoise>=6.5.0       # Static files serving
+
+# Development tools
+# django-debug-toolbar>=4.2.0
