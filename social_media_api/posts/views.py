@@ -10,6 +10,7 @@ from rest_framework import generics
 from rest_framework.response import Response
 from .models import Post, Like
 from notifications.models import Notification
+from rest_framework.views import APIView
 
 
 class PostViewSet(viewsets.ModelViewSet):
@@ -62,3 +63,28 @@ class UnlikePostView(generics.DestroyAPIView):
             return Response({"message": "Post unliked."}, status=204)
         except Like.DoesNotExist:
             return Response({"message": "You have not liked this post."}, status=400)
+
+
+class FeedView(APIView):
+    """
+    View that generates a feed based on posts from users that the current user follows.
+    Returns posts ordered by creation date with most recent posts at the top.
+    """
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request):
+        # Get all users that the current user follows
+        following_users = request.user.following.all()
+        
+        # Filter posts from followed users and order by creation date (newest first)
+        posts = Post.objects.filter(author__in=following_users).order_by('-created_at')
+        
+        # Serialize the posts
+        serializer = PostSerializer(posts, many=True)
+        
+        return Response({
+            'message': 'User feed',
+            'following_count': following_users.count(),
+            'posts_count': posts.count(),
+            'posts': serializer.data
+        })

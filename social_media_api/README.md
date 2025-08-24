@@ -269,27 +269,6 @@ user = CustomUser.objects.create_user(
 - Fields: `recipient`, `actor`, `verb`, `target`, `timestamp`, `read`
 - Generic foreign key for flexible targeting
 
-## 🚀 Development Highlights (This Week)
-
-### Monday - Tuesday (Aug 18-19)
-- Set up Django project structure
-- Implemented CustomUser model
-- Created basic authentication system
-
-### Wednesday - Thursday (Aug 20-21)
-- Developed Posts app with CRUD operations
-- Implemented Like functionality
-- Added user following system
-
-### Friday - Saturday (Aug 22-23)
-- Built Notifications system
-- Enhanced API documentation
-- Added comprehensive error handling
-
-### Sunday (Aug 24)
-- Finalized authentication flows
-- Added API testing scripts
-- Completed documentation
 
 ## 🔄 API Response Format
 
@@ -334,16 +313,10 @@ user = CustomUser.objects.create_user(
 
 This project is part of the ALX Django Learning Lab curriculum.
 
-## 📞 Support
-
-For questions or issues:
-- Create an issue in the repository
-- Contact the development team
-- Refer to Django and DRF documentation
 
 ---
 
-**Project Status**: ✅ Core functionality completed  
+**Project Status**:  Core functionality   
 **Last Updated**: August 24, 2025  
 **Version**: 1.0.0  
 **Developer**: El Atifi Haitam (Alx student)
