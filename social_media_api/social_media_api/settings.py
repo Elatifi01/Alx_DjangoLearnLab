@@ -23,8 +23,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-5z%y9m!g3tj*b+b+=bwo@wg%ji#^oyd5mljc80)%f17e6l=e1+'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True  # Enable debug mode for development
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0']  # Allow local development
+# Development setting
+# DEBUG = True  # Enable debug mode for development
+# ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0']  # Allow local development
+
+# Production settings - configured for production deployment
+DEBUG = False  # Set to False for production
+ALLOWED_HOSTS = ['your-production-domain.com', 'www.your-production-domain.com']
 
 # Production security settings - disabled for development
 # SECURE_BROWSER_XSS_FILTER = True
@@ -103,6 +108,18 @@ DATABASES = {
     }
 }
 
+# Production database configuration - uncomment for production
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'social_media_db',
+#         'USER': 'your_db_user',
+#         'PASSWORD': 'your_db_password',
+#         'HOST': 'localhost',
+#         'PORT': '5432',
+#     }
+# }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -144,3 +161,44 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Production Security Settings
+# Uncomment these settings for production deployment
+
+# SECURE_BROWSER_XSS_FILTER = True
+# SECURE_CONTENT_TYPE_NOSNIFF = True
+# X_FRAME_OPTIONS = 'DENY'
+# SECURE_SSL_REDIRECT = True
+# SESSION_COOKIE_SECURE = True
+# CSRF_COOKIE_SECURE = True
+# SECURE_HSTS_SECONDS = 31536000  # 1 year
+# SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+# SECURE_HSTS_PRELOAD = True
+
+# Static files for production
+# STATIC_ROOT = BASE_DIR / 'staticfiles'
+# STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
+
+# Media files for production
+# MEDIA_URL = '/media/'
+# MEDIA_ROOT = BASE_DIR / 'media'
+
+# Logging configuration for production
+# LOGGING = {
+#     'version': 1,
+#     'disable_existing_loggers': False,
+#     'handlers': {
+#         'file': {
+#             'level': 'INFO',
+#             'class': 'logging.FileHandler',
+#             'filename': BASE_DIR / 'django.log',
+#         },
+#     },
+#     'loggers': {
+#         'django': {
+#             'handlers': ['file'],
+#             'level': 'INFO',
+#             'propagate': True,
+#         },
+#     },
+# }
