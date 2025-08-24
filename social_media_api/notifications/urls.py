@@ -1,3 +1,4 @@
+# URL routing configuration for notifications app endpoints
 from django.urls import path
 from .views import NotificationListView
 

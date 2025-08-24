@@ -35,6 +35,7 @@ def accounts_root(request):
 class RegisterView(generics.CreateAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = RegisterSerializer
+    permission_classes = []  # Allow unauthenticated access for registration
     
     def get(self, request, *args, **kwargs):
         """Handle GET requests to show register endpoint information"""
@@ -66,8 +67,24 @@ class RegisterView(generics.CreateAPIView):
                 'Bio field is optional'
             ]
         })
+    
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.save()
+        token, created = Token.objects.get_or_create(user=user)
+        
+        return Response({
+            'id': user.id,
+            'username': user.username,
+            'email': user.email,
+            'bio': user.bio,
+            'token': token.key
+        }, status=status.HTTP_201_CREATED)
 
 class LoginView(ObtainAuthToken):
+    permission_classes = []  # Allow unauthenticated access for login
+    
     def get(self, request, *args, **kwargs):
         """Handle GET requests to show login endpoint information"""
         return Response({

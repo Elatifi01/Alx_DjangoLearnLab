@@ -23,6 +23,7 @@ class RegisterSerializer(serializers.ModelSerializer):
             password=validated_data['password'],
             bio=validated_data.get('bio', '')
         )
+        # Create token for the user
         Token.objects.create(user=user)
         return user
 

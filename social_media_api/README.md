@@ -1,244 +1,349 @@
-# README for Social Media API
+# Social Media API - Django REST Framework
 
-## Overview
+*Week of August 18-24, 2025*
 
-This project is a Social Media API built with Django and Django REST Framework, featuring user authentication and profile management.
+## 📋 Project Overview
 
-## Prerequisites
+A comprehensive social media API built with Django REST Framework, featuring user authentication, posts management, social interactions, and real-time notifications. This project was developed during the week of August 18-24, 2025, as part of the ALX Django Learning Lab curriculum.
 
-- Python 3.x
-- Django
-- Django REST Framework
+## 🚀 Features Implemented This Week
 
-## Installation
+### 🔐 User Authentication & Management
+- **Custom User Model** with extended fields (bio, profile picture, followers)
+- **Token-based Authentication** using Django REST Framework
+- **User Registration** with automatic token generation
+- **User Login** with token retrieval
+- **Profile Management** for authenticated users
+- **Follow/Unfollow System** for user interactions
 
-1. **Clone the repository**:
+### 📝 Posts & Content Management
+- **Post Creation** with content and timestamps
+- **Post Retrieval** with proper pagination
+- **Like System** for post interactions
+- **User Feed** showing posts from followed users
+- **Author Attribution** linking posts to users
+
+### 🔔 Notifications System
+- **Notification Model** for user alerts
+- **API Endpoints** for notification management
+- **User-specific Notifications** with proper filtering
+
+### 🌐 API Architecture
+- **RESTful Design** following best practices
+- **Proper HTTP Status Codes** for all responses
+- **JSON Serialization** for all data exchanges
+- **Error Handling** with descriptive messages
+- **Documentation Endpoints** for API exploration
+
+## 🏗️ Project Structure
+
+```
+social_media_api/
+├── manage.py                          # Django management script
+├── db.sqlite3                         # SQLite database
+├── check_users.py                     # User verification utility
+├── test_accounts_api.py               # API testing script
+├── ACCOUNTS_IMPLEMENTATION.md         # Implementation documentation
+├── README.md                          # This file
+├── accounts/                          # User management app
+│   ├── models.py                      # CustomUser model
+│   ├── serializers.py                # User serializers
+│   ├── views.py                       # Authentication views
+│   ├── urls.py                        # Account endpoints
+│   ├── admin.py                       # Admin configuration
+│   ├── management/commands/           # Custom management commands
+│   └── migrations/                    # Database migrations
+├── posts/                             # Posts management app
+│   ├── models.py                      # Post and Like models
+│   ├── serializers.py                # Post serializers
+│   ├── views.py                       # Post views
+│   ├── urls.py                        # Post endpoints
+│   └── migrations/                    # Database migrations
+├── notifications/                     # Notifications app
+│   ├── models.py                      # Notification model
+│   ├── serializers.py                # Notification serializers
+│   ├── views.py                       # Notification views
+│   ├── urls.py                        # Notification endpoints
+│   └── migrations/                    # Database migrations
+└── social_media_api/                  # Main project configuration
+    ├── settings.py                    # Django settings
+    ├── urls.py                        # Main URL configuration
+    ├── wsgi.py                        # WSGI configuration
+    └── asgi.py                        # ASGI configuration
+```
+
+## 🔧 Technology Stack
+
+- **Backend Framework**: Django 5.2.4
+- **API Framework**: Django REST Framework
+- **Database**: SQLite (development)
+- **Authentication**: Token-based authentication
+- **Python Version**: 3.12/3.13
+- **Development Environment**: VS Code
+
+## 📦 Installation & Setup
+
+### Prerequisites
+- Python 3.12 or higher
+- pip package manager
+- Virtual environment (recommended)
+
+### Installation Steps
+
+1. **Clone the repository**
    ```bash
    git clone <repository-url>
    cd social_media_api
    ```
 
-2. **Create a virtual environment** (optional):
+2. **Create and activate virtual environment**
    ```bash
    python -m venv venv
-   source venv/bin/activate  # On Windows use `venv\Scripts\activate`
+   # Windows
+   venv\Scripts\activate
+   # macOS/Linux
+   source venv/bin/activate
    ```
 
-3. **Install dependencies**:
+3. **Install dependencies**
    ```bash
-   pip install django djangorestframework djangorestframework-authtoken
+   pip install django djangorestframework
+   pip install Pillow  # For image handling
    ```
 
-4. **Run migrations**:
+4. **Apply database migrations**
    ```bash
    python manage.py migrate
    ```
 
-5. **Start the development server**:
+5. **Create a superuser (optional)**
+   ```bash
+   python manage.py createsuperuser
+   ```
+
+6. **Run the development server**
    ```bash
    python manage.py runserver
    ```
 
-## User Registration and Authentication
+The API will be available at `http://127.0.0.1:8000/`
 
-### Registration
+## 🛠️ API Endpoints
 
-POST to `/register/` with:
+### Authentication Endpoints
+| Method | Endpoint | Description | Authentication |
+|--------|----------|-------------|----------------|
+| POST | `/api/accounts/register/` | User registration | None |
+| POST | `/api/accounts/login/` | User login | None |
+| GET/PUT/PATCH | `/api/accounts/profile/` | User profile management | Token required |
+| POST | `/api/accounts/follow/<user_id>/` | Follow a user | Token required |
+| POST | `/api/accounts/unfollow/<user_id>/` | Unfollow a user | Token required |
+
+### Posts Endpoints
+| Method | Endpoint | Description | Authentication |
+|--------|----------|-------------|----------------|
+| GET/POST | `/api/posts/` | List/Create posts | Token required |
+| GET/PUT/DELETE | `/api/posts/<id>/` | Post detail/update/delete | Token required |
+| POST | `/api/posts/<id>/like/` | Like/Unlike a post | Token required |
+| GET | `/api/posts/feed/` | User's personalized feed | Token required |
+
+### Notifications Endpoints
+| Method | Endpoint | Description | Authentication |
+|--------|----------|-------------|----------------|
+| GET | `/api/notifications/` | List user notifications | Token required |
+| PATCH | `/api/notifications/<id>/read/` | Mark notification as read | Token required |
+
+## 📝 Usage Examples
+
+### User Registration
+```bash
+curl -X POST http://127.0.0.1:8000/api/accounts/register/ \
+  -H "Content-Type: application/json" \
+  -d '{
+    "username": "johndoe",
+    "password": "securepassword123",
+    "email": "john@example.com",
+    "bio": "Hello, I am John!"
+  }'
+```
+
+**Response:**
 ```json
 {
-    "username": "your_username",
-    "password": "your_password",
-    "email": "your_email@example.com"
+  "id": 1,
+  "username": "johndoe",
+  "email": "john@example.com",
+  "bio": "Hello, I am John!",
+  "token": "9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b"
 }
 ```
 
-### Login
+### User Login
+```bash
+curl -X POST http://127.0.0.1:8000/api/accounts/login/ \
+  -H "Content-Type: application/json" \
+  -d '{
+    "username": "johndoe",
+    "password": "securepassword123"
+  }'
+```
 
-POST to `/login/` with:
+**Response:**
 ```json
 {
-    "username": "your_username",
-    "password": "your_password"
+  "token": "9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b",
+  "user_id": 1,
+  "email": "john@example.com"
 }
 ```
 
-## User Model Overview
+### Create a Post
+```bash
+curl -X POST http://127.0.0.1:8000/api/posts/ \
+  -H "Authorization: Token 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "content": "This is my first post!"
+  }'
+```
 
-The custom user model includes:
-- **bio**: Biography text.
-- **profile_picture**: User's profile image.
-- **followers**: Many-to-many relationship for following other users.
+### Get User Profile
+```bash
+curl -X GET http://127.0.0.1:8000/api/accounts/profile/ \
+  -H "Authorization: Token 9944b09199c62bcf9418ad846dd0e4bbdfc6ee4b"
+```
 
-## Testing the API
+## 🧪 Testing
 
-Use Postman or curl to test endpoints:
-- Register: `/register/`
-- Login: `/login/`
-- Access profile: `/profile/` (include token in headers).
+### Automated Testing
+Run the API test suite:
+```bash
+python test_accounts_api.py
+```
+
+### Manual Testing
+Use tools like:
+- **Postman** for comprehensive API testing
+- **curl** for command-line testing
+- **Django Admin** at `/admin/` for data management
+- **Browser** for GET endpoints
+
+### Test User Creation
+```bash
+python manage.py shell
+```
+```python
+from accounts.models import CustomUser
+user = CustomUser.objects.create_user(
+    username='testuser',
+    email='test@example.com',
+    password='testpass123'
+)
+```
+
+## 🔒 Security Features
+
+- **Password Hashing** using Django's built-in security
+- **Token Authentication** for API access
+- **CSRF Protection** for web forms
+- **Input Validation** through serializers
+- **Permission Classes** for endpoint protection
+- **User Isolation** - users can only access their own data
+
+## 📊 Database Models
+
+### CustomUser Model
+- Extends Django's AbstractUser
+- Additional fields: `bio`, `profile_picture`, `followers`
+- Many-to-many relationship for following system
+
+### Post Model
+- Fields: `author`, `content`, `created_at`, `updated_at`
+- Foreign key relationship to CustomUser
+
+### Like Model
+- Fields: `user`, `post`, `created_at`
+- Unique constraint on user-post combination
+
+### Notification Model
+- Fields: `recipient`, `actor`, `verb`, `target`, `timestamp`, `read`
+- Generic foreign key for flexible targeting
+
+## 🚀 Development Highlights (This Week)
+
+### Monday - Tuesday (Aug 18-19)
+- Set up Django project structure
+- Implemented CustomUser model
+- Created basic authentication system
+
+### Wednesday - Thursday (Aug 20-21)
+- Developed Posts app with CRUD operations
+- Implemented Like functionality
+- Added user following system
+
+### Friday - Saturday (Aug 22-23)
+- Built Notifications system
+- Enhanced API documentation
+- Added comprehensive error handling
+
+### Sunday (Aug 24)
+- Finalized authentication flows
+- Added API testing scripts
+- Completed documentation
+
+## 🔄 API Response Format
+
+### Success Response
+```json
+{
+  "data": {...},
+  "status": "success",
+  "message": "Operation completed successfully"
+}
+```
+
+### Error Response
+```json
+{
+  "error": "Error description",
+  "status": "error",
+  "details": {...}
+}
+```
+
+## 🎯 Future Enhancements
+
+- [ ] **Image Upload** for posts and profile pictures
+- [ ] **Real-time Chat** using WebSockets
+- [ ] **Push Notifications** for mobile apps
+- [ ] **Advanced Search** with filters
+- [ ] **Content Moderation** tools
+- [ ] **Analytics Dashboard** for user engagement
+- [ ] **Rate Limiting** for API endpoints
+- [ ] **Caching** for improved performance
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests for new functionality
+5. Submit a pull request
+
+## 📄 License
+
+This project is part of the ALX Django Learning Lab curriculum.
+
+## 📞 Support
+
+For questions or issues:
+- Create an issue in the repository
+- Contact the development team
+- Refer to Django and DRF documentation
 
 ---
-Overview
-Documenting your API is essential for developers to understand how to interact with it. This documentation will cover the available endpoints, their methods, required parameters, and example requests and responses.
-Endpoint Documentation Structure
-Base URL: Specify the base URL for your API.
-Example: http://127.0.0.1:8000/api/
-Authentication: Describe the authentication method (e.g., token-based).
-Example: "Use Bearer token for authentication in the header."
-Endpoints:
-List each endpoint with details about its functionality.
-Example Endpoints
-Posts
-POST /posts/
-Description: Create a new post.
-Request Body:
-json
-{
-    "title": "Post Title",
-    "content": "Post content."
-}
 
-Response:
-json
-{
-    "id": 1,
-    "author": 1,
-    "title": "Post Title",
-    "content": "Post content.",
-    "created_at": "2024-01-01T00:00:00Z",
-    "updated_at": "2024-01-01T00:00:00Z"
-}
-
-GET /posts/
-Description: Retrieve a list of posts.
-Response:
-json
-[
-    {
-        "id": 1,
-        "author": 1,
-        "title": "Post Title",
-        "content": "Post content.",
-        "created_at": "2024-01-01T00:00:00Z",
-        "updated_at": "2024-01-01T00:00:00Z"
-    }
-]
-
-GET /posts/{id}/
-Description: Retrieve a specific post by ID.
-PUT /posts/{id}/
-Description: Update a specific post by ID.
-DELETE /posts/{id}/
-Description: Delete a specific post by ID.
-Comments
-POST /comments/
-Description: Create a new comment.
-Request Body:
-json
-{
-    "post": 1,
-    "content": "Comment content."
-}
-
-Response:
-json
-{
-    "id": 1,
-    "post": 1,
-    "author": 1,
-    "content": "Comment content.",
-    "created_at": "2024-01-01T00:00:00Z",
-    "updated_at": "2024-01-01T00:00:00Z"
-}
-
-Tools for Documentation
-Django REST Swagger or drf-spectacular can be integrated to generate interactive API documentation automatically from your views and serializers.
-To set up drf-spectacular:
-bash
-pip install drf-spectacular
-
-Update your settings.py to include:
-python
-INSTALLED_APPS = [
-    ...
-    'drf_spectacular',
-]
-
-REST_FRAMEWORK = {
-    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
-}
-
-Add URL patterns for documentation in your main urls.py:
-python
-from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
-
-urlpatterns = [
-    ...
-    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
-    path('api/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
-]
-
-
-1. Updated Models and Migrations
-Description: This section includes all changes made to the CustomUser model in the accounts app, specifically the addition of the following fields:
-Followers: A many-to-many relationship field allowing users to follow other users.
-Profile Picture: An image field for storing user profile pictures.
-Bio: A text field for user biographies.
-Migrations: All new migrations created as a result of these model changes are included. The migration files ensure that the database schema is updated to reflect the new model structure.
-Files Included:
-accounts/models.py: Updated model definitions.
-Migration files (e.g., 0002_auto_some_id.py): Files created to apply changes to the database schema.
-2. Code Files for Views and Serializers
-Description: This section contains the implementation of views and serializers that facilitate user follow management and post feed generation.
-Follow Management:
-Views for following and unfollowing users, ensuring proper permissions are enforced.
-Feed Generation:
-A view that generates a dynamic content feed based on posts from users that the current user follows.
-Files Included:
-accounts/views.py: Contains views for follow management.
-posts/views.py: Contains views for generating the user feed.
-posts/serializers.py: Serializers used for validating and formatting data related to posts.
-3. URL Configurations
-Description: This section outlines the new routes added to handle follow management and feed retrieval functionalities.
-Follow Management Routes:
-Endpoint for following a user: /follow/<int:user_id>/
-Endpoint for unfollowing a user: /unfollow/<int:user_id>/
-Feed Route:
-Endpoint for retrieving the user's feed: /feed/
-Files Included:
-accounts/urls.py: Updated URL configurations for follow management.
-posts/urls.py: Updated URL configurations for the feed endpoint.
-4. Documentation
-Description: Comprehensive API documentation covering all new functionalities, including details on how to manage follows and access the feed.
-Contents of Documentation:
-Overview of new endpoints with descriptions, required parameters, request and response examples.
-Information on how to authenticate requests using tokens.
-Files Included:
-README.md: Updated documentation file containing instructions on using the new features, including examples of API requests and responses.
-Additional markdown files (if any) that provide detailed API specifications.
-
-API Documentation
-Document the functionality and endpoints for likes and notifications:
-Likes
-POST /posts/<post_id>/like/: Allows a user to like a specific post.
-Request Body: None required.
-Response:
-Success (201): { "message": "Post liked." }
-Already liked (400): { "message": "You already liked this post." }
-DELETE /posts/<post_id>/unlike/: Allows a user to unlike a specific post.
-Response:
-Success (204): { "message": "Post unliked." }
-Not liked (400): { "message": "You have not liked this post." }
-Notifications
-GET /notifications/: Fetches all notifications for the authenticated user.
-Response:
-json
-[
-    {
-        "id": 1,
-        "actor": "<actor_user>",
-        "verb": "liked your post",
-        "target": "<target_post>",
-        "timestamp": "2024-01-01T00:00:00Z",
-        "is_read": false
-    }
-]
+**Project Status**: ✅ Core functionality completed  
+**Last Updated**: August 24, 2025  
+**Version**: 1.0.0  
+**Developer**: ALX Django Learning Lab Student
