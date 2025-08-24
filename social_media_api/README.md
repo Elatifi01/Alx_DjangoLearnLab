@@ -346,4 +346,4 @@ For questions or issues:
 **Project Status**: ✅ Core functionality completed  
 **Last Updated**: August 24, 2025  
 **Version**: 1.0.0  
-**Developer**: ALX Django Learning Lab Student
+**Developer**: El Atifi Haitam (Alx student)
