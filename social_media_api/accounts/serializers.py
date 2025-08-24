@@ -10,14 +10,14 @@ class UserSerializer(serializers.ModelSerializer):
 
 class RegisterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
+    # Example of basic CharField usage: serializers.CharField()
     
     class Meta:
         model = CustomUser
         fields = ['username', 'password', 'email', 'bio']
     
     def create(self, validated_data):
-        user_model = get_user_model()
-        user = user_model.objects.create_user(
+        user = get_user_model().objects.create_user(
             username=validated_data['username'],
             email=validated_data['email'],
             password=validated_data['password'],
